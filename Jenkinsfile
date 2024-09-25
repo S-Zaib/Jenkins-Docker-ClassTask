@@ -28,7 +28,9 @@ pipeline {
                         """
                     } else {
                         bat """
-                            echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin
+                            echo %DOCKERHUB_CREDENTIALS_PSW% > password.txt
+                            docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin < password.txt
+                            del password.txt
                         """
                     }
                 }
