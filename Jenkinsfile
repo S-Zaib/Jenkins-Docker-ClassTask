@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        DOCKER_IMAGE = "your-dockerhub-username/ml-app:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "szaib/ml-app:${BUILD_NUMBER}"
     }
     
     stages {
