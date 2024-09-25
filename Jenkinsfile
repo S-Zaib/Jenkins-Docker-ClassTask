@@ -9,26 +9,52 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
+                script {
+                    if (isUnix()) {
+                        sh "docker build -t ${DOCKER_IMAGE} ."
+                    } else {
+                        bat "docker build -t ${DOCKER_IMAGE} ."
+                    }
+                }
             }
         }
         
         stage('Login to DockerHub') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                script {
+                    if (isUnix()) {
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    } else {
+                        bat '''
+                            echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin
+                        '''
+                    }
+                }
             }
         }
         
         stage('Push Docker Image') {
             steps {
-                sh "docker push ${DOCKER_IMAGE}"
+                script {
+                    if (isUnix()) {
+                        sh "docker push ${DOCKER_IMAGE}"
+                    } else {
+                        bat "docker push ${DOCKER_IMAGE}"
+                    }
+                }
             }
         }
     }
     
     post {
         always {
-            sh 'docker logout'
+            script {
+                if (isUnix()) {
+                    sh 'docker logout'
+                } else {
+                    bat 'docker logout'
+                }
+            }
         }
     }
 }
