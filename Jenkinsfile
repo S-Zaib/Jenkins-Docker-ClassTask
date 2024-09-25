@@ -23,15 +23,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh """
-                            echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin
-                        """
+                        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     } else {
-                        bat """
-                            echo %DOCKERHUB_CREDENTIALS_PSW% > password.txt
-                            docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin < password.txt
-                            del password.txt
-                        """
+                        bat 'echo %DOCKERHUB_CREDENTIALS_PSW%| docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
                     }
                 }
             }
